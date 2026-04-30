@@ -52,6 +52,20 @@ export default function Sobre() {
         <p style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>
           Transferência de calor aplicada ao gerenciamento térmico de processadores
         </p>
+        <p
+          style={{
+            marginTop: '16px',
+            color: 'var(--text-secondary)',
+            fontSize: '14px',
+            lineHeight: 1.75,
+            maxWidth: '640px',
+          }}
+        >
+          Este simulador foi desenvolvido como projeto final de Física II, aplicando conceitos de
+          termodinâmica ao gerenciamento térmico de processadores. A partir de parâmetros reais de
+          hardware, o site calcula a temperatura de regime permanente de uma CPU e exibe a curva de
+          aquecimento ao longo do tempo.
+        </p>
       </div>
 
       {/* Informações acadêmicas */}

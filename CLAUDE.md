@@ -1,98 +1,54 @@
 # Simulador Térmico de PC
 
-Trabalho final de Física 2 (Termodinâmica) — Engenharia da Computação, Univali, Campus Itajaí, 3ª fase.
-Autores: Dhavi Grandó da Silva, Felipe Scremin, Henrique de Souza. Professora: Paola Egert.
+Projeto acadêmico de Física II — Universidade do Vale do Itajaí (Univali), Campus Itajaí.
+Autores: Dhavi Grandó da Silva, Felipe Scremin e Henrique de Souza. Professora: Paola Egert.
 
 ## Stack
 
-- **React 19** + **Vite 8** — scaffolding e build
-- **Tailwind CSS** via plugin `@tailwindcss/vite` — utilitários; estilos de componente são inline
+- **React** + **Vite** — framework e build
+- **Tailwind CSS** (plugin `@tailwindcss/vite`) — utilitários de estilo; estilos de componente são inline
 - **Recharts** — gráfico da curva de aquecimento T(t)
-- **React Router DOM** — roteamento client-side (sem backend)
-- **IBM Plex Mono** + **DM Sans** — fontes (Google Fonts)
-
-## Estrutura
-
-```
-src/
-  data/
-    hardware.js   # arrays de CPUs, coolers e pastas com nome e parâmetros físicos
-    physics.js    # funções calcTFinal, calcCurva, tempToColor, tempLabel
-  hooks/
-    useIsMobile.js  # detecta largura < 768px com resize listener
-  components/
-    Header.jsx        # navbar fixa, responsiva
-    ControlPanel.jsx  # dropdowns e sliders do simulador
-    PCIllustration.jsx # SVG com glow térmico proporcional à temperatura
-    TempCard.jsx      # card de temperatura final com barra de status
-    TempChart.jsx     # gráfico Recharts da curva T(t)
-  pages/
-    Simulador.jsx  # rota /  — layout em 3 colunas (desktop) / 1 coluna (mobile)
-    Fisica.jsx     # rota /fisica — 5 seções teóricas com fórmulas
-    Sobre.jsx      # rota /sobre — dados acadêmicos e referências ABNT
-```
+- **React Router DOM** — três rotas client-side (`/`, `/fisica`, `/sobre`)
+- Sem backend. Toda a lógica roda no browser.
 
 ## Modelo Físico
 
 ### Temperatura em regime permanente
 
 ```
-T_final = T_ambiente + (TDP × carga/100) × (R_pasta + R_cooler)
+T_final = T_amb + (TDP × carga) × (R_pasta + R_cooler)
 ```
-
-- `TDP` em watts, definido por CPU
-- `carga` em % (0–100), controlada pelo slider
-- `R_pasta` e `R_cooler` em °C/W, definidos pelos dropdowns
-- `T_ambiente` em °C (15–40), controlada pelo slider
 
 ### Curva temporal de aquecimento
 
 ```
-T(t) = T_final − (T_final − T_ambiente) × exp(−t / τ)
+T(t) = T_final − (T_final − T_amb) × e^(−t/τ)
 ```
 
-- `τ = 60 s` (constante de tempo padrão para desktop)
-- 61 pontos gerados de t = 0 s a t = 300 s
-- Curva recalculada em tempo real a cada mudança de controle
-
-### Escala de risco
-
-| Faixa | Status |
-|-------|--------|
-| < 50 °C | Frio |
-| 50–69 °C | Normal |
-| 70–84 °C | Quente |
-| 85–99 °C | Crítico |
-| ≥ 100 °C | PERIGO |
-
-## Design
-
-- **Tema escuro** — fundo `#09090c`, superfícies em tons de `#10–#1c`
-- **Calor → cor**: gradiente azul (`#0099ee`) → laranja (`#ff8c00`) → vermelho (`#ff5500`) proporcional à temperatura (25 °C–100 °C), aplicado em tempo real ao glow da ilustração, ao texto da temperatura e à linha do gráfico
-- **Tipografia**: IBM Plex Mono para dados numéricos e labels; DM Sans para texto corrido
-- **Responsividade**: hook `useIsMobile` (breakpoint 768 px) alterna o grid de 3 colunas para coluna única; header reduz fonte do título no mobile
-- **Gráfico mobile**: `touch-action: none` no wrapper do Recharts impede scroll indesejado; `outline: none` remove borda de foco do browser
+Parâmetros: `τ = 60 s`, 61 pontos de `t = 0` a `t = 300 s`, recalculado em tempo real.
 
 ## Dados de Hardware
 
-Definidos em `src/data/hardware.js` como arrays de objetos:
+Definidos em `src/data/hardware.js`:
 
 ```js
 // CPUs
-{ nome: string, tdp: number }          // tdp em watts
+{ nome: string, tdp: number }           // TDP em watts
 
-// Coolers e pastas
+// Coolers e pastas térmicas
 { nome: string, resistencia_termica: number }  // em °C/W
 ```
 
-## Repositório
+## Design
 
-- GitHub: https://github.com/dhavigrando/simulador-termico-de-pc
-- Deploy: Vercel (CI automático a cada push no branch master)
+- Tema escuro — fundo `#09090c`, superfícies `#10`–`#1c`
+- Acentos laranja/vermelho para calor: gradiente `#0099ee` → `#ff8c00` → `#ff5500` proporcional à temperatura (25–100 °C)
+- Tipografia: **IBM Plex Mono** para dados numéricos; **DM Sans** para texto
+- Responsivo: hook `useIsMobile` (breakpoint 768 px) alterna entre grid de 3 colunas e coluna única
 
-## Fluxo de trabalho
+## Fluxo de Trabalho
 
-Todo commit deve ser seguido de push imediato para o GitHub:
+Todo commit deve incluir push imediato para o GitHub:
 
 ```bash
 git add <arquivos>
