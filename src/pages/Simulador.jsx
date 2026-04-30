@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { cpus, coolers, pastas } from '../data/hardware';
 import { calcTFinal, calcCurva } from '../data/physics';
+import { useIsMobile } from '../hooks/useIsMobile';
 import ControlPanel from '../components/ControlPanel';
 import PCIllustration from '../components/PCIllustration';
 import TempCard from '../components/TempCard';
@@ -16,6 +17,7 @@ const initialState = {
 
 export default function Simulador() {
   const [state, setState] = useState(initialState);
+  const isMobile = useIsMobile();
 
   const onChange = (key, value) => {
     setState(prev => ({ ...prev, [key]: value }));
@@ -38,7 +40,7 @@ export default function Simulador() {
       style={{
         maxWidth: '1400px',
         margin: '0 auto',
-        padding: '80px 24px 40px',
+        padding: isMobile ? '72px 16px 32px' : '80px 24px 40px',
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
@@ -48,13 +50,13 @@ export default function Simulador() {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'auto 1fr auto',
+          gridTemplateColumns: isMobile ? '1fr' : 'auto 1fr auto',
           gap: '16px',
           alignItems: 'start',
           flex: 1,
         }}
       >
-        <ControlPanel state={state} onChange={onChange} />
+        <ControlPanel state={state} onChange={onChange} isMobile={isMobile} />
 
         <PCIllustration tFinal={tFinal} tAmbiente={tAmbiente} />
 
@@ -63,29 +65,32 @@ export default function Simulador() {
             display: 'flex',
             flexDirection: 'column',
             gap: '16px',
-            minWidth: '280px',
-            maxWidth: '320px',
+            width: isMobile ? '100%' : undefined,
+            minWidth: isMobile ? 'unset' : '280px',
+            maxWidth: isMobile ? 'unset' : '320px',
           }}
         >
           <TempCard tFinal={tFinal} tAmbiente={tAmbiente} />
-          <TempChart data={curva} tFinal={tFinal} tAmbiente={tAmbiente} />
+          <TempChart data={curva} tFinal={tFinal} tAmbiente={tAmbiente} isMobile={isMobile} />
         </div>
       </div>
 
-      <div
-        style={{
-          borderTop: '1px solid var(--border)',
-          paddingTop: '12px',
-          fontFamily: 'IBM Plex Mono, monospace',
-          fontSize: '10px',
-          color: 'var(--text-muted)',
-          textAlign: 'center',
-          letterSpacing: '0.06em',
-        }}
-      >
-        T<sub>final</sub> = T<sub>amb</sub> + (TDP × carga) × (R<sub>pasta</sub> + R<sub>cooler</sub>) &nbsp;|&nbsp;
-        T(t) = T<sub>final</sub> − (T<sub>final</sub> − T<sub>amb</sub>) × e<sup>−t/τ</sup> &nbsp;|&nbsp; τ = 60 s
-      </div>
+      {!isMobile && (
+        <div
+          style={{
+            borderTop: '1px solid var(--border)',
+            paddingTop: '12px',
+            fontFamily: 'IBM Plex Mono, monospace',
+            fontSize: '10px',
+            color: 'var(--text-muted)',
+            textAlign: 'center',
+            letterSpacing: '0.06em',
+          }}
+        >
+          T<sub>final</sub> = T<sub>amb</sub> + (TDP × carga) × (R<sub>pasta</sub> + R<sub>cooler</sub>) &nbsp;|&nbsp;
+          T(t) = T<sub>final</sub> − (T<sub>final</sub> − T<sub>amb</sub>) × e<sup>−t/τ</sup> &nbsp;|&nbsp; τ = 60 s
+        </div>
+      )}
     </div>
   );
 }

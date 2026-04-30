@@ -27,7 +27,7 @@ const Divider = () => (
   <div style={{ height: '1px', background: 'var(--border)', margin: '4px 0' }} />
 );
 
-export default function ControlPanel({ state, onChange }) {
+export default function ControlPanel({ state, onChange, isMobile }) {
   const { cpuIdx, coolerIdx, pastaIdx, tAmbiente, carga } = state;
   const cpu = cpus[cpuIdx];
   const cooler = coolers[coolerIdx];
@@ -43,8 +43,9 @@ export default function ControlPanel({ state, onChange }) {
         display: 'flex',
         flexDirection: 'column',
         gap: '18px',
-        minWidth: '240px',
-        maxWidth: '280px',
+        width: isMobile ? '100%' : undefined,
+        minWidth: isMobile ? 'unset' : '240px',
+        maxWidth: isMobile ? 'unset' : '280px',
       }}
     >
       <div>

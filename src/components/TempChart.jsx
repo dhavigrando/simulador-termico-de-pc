@@ -23,7 +23,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-export default function TempChart({ data, tFinal, tAmbiente }) {
+export default function TempChart({ data, tFinal, tAmbiente, isMobile }) {
   const lineColor = tempToColor(tFinal);
   const minY = Math.max(0, tAmbiente - 5);
   const maxY = Math.ceil(tFinal * 1.08 / 10) * 10;
@@ -52,46 +52,49 @@ export default function TempChart({ data, tFinal, tAmbiente }) {
         CURVA DE AQUECIMENTO T(t)
       </div>
 
-      <ResponsiveContainer width="100%" height={180}>
-        <LineChart data={data} margin={{ top: 4, right: 10, bottom: 0, left: -10 }}>
-          <CartesianGrid strokeDasharray="3 6" stroke="var(--border)" vertical={false} />
-          <XAxis
-            dataKey="t"
-            tickLine={false}
-            axisLine={false}
-            tick={{ fontFamily: 'IBM Plex Mono', fontSize: 10, fill: 'var(--text-muted)' }}
-            tickFormatter={v => `${v}s`}
-            interval={11}
-          />
-          <YAxis
-            domain={[minY, maxY]}
-            tickLine={false}
-            axisLine={false}
-            tick={{ fontFamily: 'IBM Plex Mono', fontSize: 10, fill: 'var(--text-muted)' }}
-            tickFormatter={v => `${v}°`}
-            width={36}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <ReferenceLine
-            y={tFinal}
-            stroke={lineColor}
-            strokeDasharray="4 4"
-            strokeOpacity={0.4}
-            strokeWidth={1}
-          />
-          <Line
-            type="monotone"
-            dataKey="temp"
-            stroke={lineColor}
-            strokeWidth={2}
-            dot={false}
-            activeDot={{ r: 4, fill: lineColor, stroke: 'var(--bg-void)', strokeWidth: 2 }}
-            isAnimationActive={true}
-            animationDuration={600}
-            animationEasing="ease-out"
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      {/* touch-action: none impede que o toque no gráfico dispare scroll da página */}
+      <div style={{ touchAction: 'none', userSelect: 'none' }}>
+        <ResponsiveContainer width="100%" height={180}>
+          <LineChart data={data} margin={{ top: 4, right: 10, bottom: 0, left: -10 }}>
+            <CartesianGrid strokeDasharray="3 6" stroke="var(--border)" vertical={false} />
+            <XAxis
+              dataKey="t"
+              tickLine={false}
+              axisLine={false}
+              tick={{ fontFamily: 'IBM Plex Mono', fontSize: 10, fill: 'var(--text-muted)' }}
+              tickFormatter={v => `${v}s`}
+              interval={11}
+            />
+            <YAxis
+              domain={[minY, maxY]}
+              tickLine={false}
+              axisLine={false}
+              tick={{ fontFamily: 'IBM Plex Mono', fontSize: 10, fill: 'var(--text-muted)' }}
+              tickFormatter={v => `${v}°`}
+              width={36}
+            />
+            {!isMobile && <Tooltip content={<CustomTooltip />} />}
+            <ReferenceLine
+              y={tFinal}
+              stroke={lineColor}
+              strokeDasharray="4 4"
+              strokeOpacity={0.4}
+              strokeWidth={1}
+            />
+            <Line
+              type="monotone"
+              dataKey="temp"
+              stroke={lineColor}
+              strokeWidth={2}
+              dot={false}
+              activeDot={isMobile ? false : { r: 4, fill: lineColor, stroke: 'var(--bg-void)', strokeWidth: 2 }}
+              isAnimationActive={true}
+              animationDuration={600}
+              animationEasing="ease-out"
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
 
       <div
         style={{
