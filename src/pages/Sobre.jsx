@@ -5,7 +5,9 @@ const autores = [
 ];
 
 const referencias = [
-  // Adicionar referências aqui
+  'HALLIDAY, David; RESNICK, Robert; WALKER, Jearl. Fundamentos de física: Gravitação, Ondas e Termodinâmica. 9. ed. Rio de Janeiro: LTC, 2012.',
+  'YOUNG, Hugh D. et al. Física II: Termodinâmica e Ondas. 12. ed. São Paulo: Pearson, 2008.',
+  'TIPLER, Paul Allen; MOSCA, Gene. Física para cientistas e engenheiros: Mecânica, Oscilações, Ondas e Termodinâmica. 6. ed. Rio de Janeiro: LTC, 2009.',
 ];
 
 export default function Sobre() {
@@ -78,7 +80,8 @@ export default function Sobre() {
           {[
             { label: 'Instituição', value: 'Universidade do Vale do Itajaí — Univali, Campus Itajaí' },
             { label: 'Curso', value: 'Engenharia da Computação — 3ª Fase' },
-            { label: 'Disciplina', value: 'Física 2 — Fundamentos de Mecânica Ondulatória e Termodinâmica' },
+            { label: 'Disciplina', value: 'Física II' },
+            { label: 'Tema', value: 'Termodinâmica' },
             { label: 'Professora', value: 'Paola Egert' },
             { label: 'Período', value: 'Maio de 2026' },
           ].map(({ label, value }) => (

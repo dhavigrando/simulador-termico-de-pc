@@ -23,7 +23,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-export default function TempChart({ data, tFinal, tAmbiente, isMobile }) {
+export default function TempChart({ data, tFinal, tAmbiente }) {
   const lineColor = tempToColor(tFinal);
   const minY = Math.max(0, tAmbiente - 5);
   const maxY = Math.ceil(tFinal * 1.08 / 10) * 10;
@@ -52,8 +52,12 @@ export default function TempChart({ data, tFinal, tAmbiente, isMobile }) {
         CURVA DE AQUECIMENTO T(t)
       </div>
 
-      {/* touch-action: none impede que o toque no gráfico dispare scroll da página */}
-      <div style={{ touchAction: 'none', userSelect: 'none' }}>
+      {/*
+        touch-action: none — impede scroll ao arrastar sobre o gráfico.
+        outline: none    — remove a borda azul de foco que o browser aplica ao SVG no mobile.
+        user-select: none — evita seleção acidental de texto ao tocar.
+      */}
+      <div style={{ touchAction: 'none', outline: 'none', userSelect: 'none' }}>
         <ResponsiveContainer width="100%" height={180}>
           <LineChart data={data} margin={{ top: 4, right: 10, bottom: 0, left: -10 }}>
             <CartesianGrid strokeDasharray="3 6" stroke="var(--border)" vertical={false} />
@@ -73,7 +77,7 @@ export default function TempChart({ data, tFinal, tAmbiente, isMobile }) {
               tickFormatter={v => `${v}°`}
               width={36}
             />
-            {!isMobile && <Tooltip content={<CustomTooltip />} />}
+            <Tooltip content={<CustomTooltip />} />
             <ReferenceLine
               y={tFinal}
               stroke={lineColor}
@@ -87,7 +91,7 @@ export default function TempChart({ data, tFinal, tAmbiente, isMobile }) {
               stroke={lineColor}
               strokeWidth={2}
               dot={false}
-              activeDot={isMobile ? false : { r: 4, fill: lineColor, stroke: 'var(--bg-void)', strokeWidth: 2 }}
+              activeDot={{ r: 4, fill: lineColor, stroke: 'var(--bg-void)', strokeWidth: 2 }}
               isAnimationActive={true}
               animationDuration={600}
               animationEasing="ease-out"

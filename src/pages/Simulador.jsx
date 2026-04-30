@@ -71,7 +71,7 @@ export default function Simulador() {
           }}
         >
           <TempCard tFinal={tFinal} tAmbiente={tAmbiente} />
-          <TempChart data={curva} tFinal={tFinal} tAmbiente={tAmbiente} isMobile={isMobile} />
+          <TempChart data={curva} tFinal={tFinal} tAmbiente={tAmbiente} />
         </div>
       </div>
 

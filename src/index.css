@@ -100,3 +100,10 @@ select:focus {
 select option {
   background-color: var(--bg-card);
 }
+
+/* Remove borda azul de foco que browsers mobile aplicam ao SVG do Recharts */
+.recharts-wrapper,
+.recharts-wrapper svg,
+.recharts-surface {
+  outline: none !important;
+}
